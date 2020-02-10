@@ -21,7 +21,6 @@ function qtdProfessores(index){
 function nomeProfessorFormatado(index) {
     let nome = items[index].getElementsByClassName('field-get_outras_informacoes')[0].textContent.split('Professores:'),
         nome_formatado = nome[1].split('(');
-    console.log(nome_formatado[0].substr(1, nome_formatado[0].length - 2));
     return nome_formatado[0].substr(1, nome_formatado[0].length - 2);
 }
 
@@ -32,10 +31,12 @@ for (let i = 0; i < items.length; i++) {
         materia = nomeMateriaFormatado(items[i].getElementsByClassName('field-componente_curricular')[0].innerText);
 
     if(qtd > 1) {
-      /*  while ( qtd != 0) {  // mais de um professor
+        const lista_professores = 
+        while ( qtd != 0) {  // mais de um professor
+            
             objetos.push({ codigo, materia, professor });
             qtd--;
-        } */
+        }
     } else {
         let professor = nomeProfessorFormatado(i);
         objetos.push({ codigo, materia, professor });
