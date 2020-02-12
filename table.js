@@ -26,32 +26,40 @@ function nomeProfessorFormatado(nomeArray) {
         nome = '';
     let i = 0;
     while ( tamanho > 1 ) {
-        nome += nome_formatado[i++] + ' ';
+        if(! (nome_formatado[i] === '(Principal)' || nome_formatado[i] === '(Formador)') ) {
+            nome += nome_formatado[i++] + ' ';
+        }
         tamanho--;
     }
     return nome.substr(0, nome.length - 1);
 }
 
-for (let i = 0; i < items.length; i++) {
-    
-    let qtd = qtdProfessores(i),
-        codigo = items[i].getElementsByClassName('field-id')[0].innerText,
-        materia = nomeMateriaFormatado(items[i].getElementsByClassName('field-componente_curricular')[0].innerText),
-        items_save = items[i].getElementsByClassName('field-get_outras_informacoes')[0],
-        professor;
 
-    if(qtd > 1) { // VARIOS PROFESSORES
-        const lista_professores = items_save.getElementsByTagName('ul')[0].getElementsByTagName('li');
-        while ( qtd != 0) {
-            professor = nomeProfessorFormatado(lista_professores[--qtd].innerText);
-            objetos.push({ codigo, materia, professor });
-        }
-    } else { // UNICO PROFESSOR
-        let professor_nome = items_save.textContent;
-        professor_nome = professor_nome.split('Professores:');
-        professor = nomeProfessorFormatado(professor_nome[1]);
-        objetos.push({ codigo, materia, professor });
+function print_professores() {
+    for (let i = 0; i < objetos.length; i++) {
+        console.log(`${i + 1}º | ${objetos[i].codigo} | ${objetos[i].materia} | ${objetos[i].professor} | `);
     }
 }
 
-console.log(objetos);
+function resgartaProfessores() {
+    for (let i = 0; i < items.length; i++) {
+        let qtd = qtdProfessores(i),
+            codigo = items[i].getElementsByClassName('field-id')[0].innerText,
+            materia = nomeMateriaFormatado(items[i].getElementsByClassName('field-componente_curricular')[0].innerText),
+            items_save = items[i].getElementsByClassName('field-get_outras_informacoes')[0],
+            professor;
+    
+        if(qtd > 1) { // VARIOS PROFESSORES
+            const lista_professores = items_save.getElementsByTagName('ul')[0].getElementsByTagName('li');
+            while ( qtd != 0) {
+              professor = nomeProfessorFormatado(lista_professores[--qtd].innerText);
+              objetos.push({ codigo, materia, professor });
+            }
+        } else { // UNICO PROFESSOR
+            let professor_nome = items_save.textContent.split('Professores:')[1].split('Alunos:')[0];
+            professor = nomeProfessorFormatado(professor_nome);
+            objetos.push({ codigo, materia, professor });
+        }
+    }
+    print_professores();
+}
